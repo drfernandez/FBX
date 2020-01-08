@@ -9,7 +9,7 @@
 int main()
 {
 	using FuncPtr = void(*)(
-		const char*, 
+		const char*,
 		const char*,
 		const char*,
 		const char*,
@@ -22,7 +22,7 @@ int main()
 	HMODULE mod = LoadLibrary(L"FBXINOUT.dll");
 	FuncPtr func_ptr = (FuncPtr)GetProcAddress(mod, "ExportFbxDataFromFile");
 
-	if(func_ptr)
+	if (func_ptr)
 		func_ptr(
 			//"../Assets/BattleMage_Run.fbx", 
 			//"../Assets/BattleMage_Run.msh",
@@ -35,6 +35,8 @@ int main()
 			true,
 			true
 		);
+
+	bool freed = FreeLibrary(mod);
 
 	return 0;
 }
