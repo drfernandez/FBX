@@ -194,33 +194,33 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="VS_PCTNTBJW.hlsl">
-      <Filter>Shaders\Vertex</Filter>
-    </FxCompile>
-    <FxCompile Include="PS_PCTNTBJW.hlsl">
+    <FxCompile Include="..\Shaders\PS_DebugLines.hlsl">
       <Filter>Shaders\Pixel</Filter>
     </FxCompile>
-    <FxCompile Include="VS_PCTNTBJW_ANIM.hlsl">
-      <Filter>Shaders\Vertex</Filter>
-    </FxCompile>
-    <FxCompile Include="VS_DEBUGLINES.hlsl">
-      <Filter>Shaders\Vertex</Filter>
-    </FxCompile>
-    <FxCompile Include="PS_DEBUGLINES.hlsl">
+    <FxCompile Include="..\Shaders\PS_PCTNTBJW.hlsl">
       <Filter>Shaders\Pixel</Filter>
     </FxCompile>
-    <FxCompile Include="VS_SKYBOX.hlsl">
+    <FxCompile Include="..\Shaders\PS_PCTNTBJW_TEX_ONLY.hlsl">
+      <Filter>Shaders\Pixel</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\PS_SKYBOX.hlsl">
+      <Filter>Shaders\Pixel</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\VS_SKYBOX.hlsl">
       <Filter>Shaders\Vertex</Filter>
     </FxCompile>
-    <FxCompile Include="PS_SKYBOX.hlsl">
-      <Filter>Shaders\Pixel</Filter>
+    <FxCompile Include="..\Shaders\VS_PCTNTBJW_ANIM.hlsl">
+      <Filter>Shaders\Vertex</Filter>
     </FxCompile>
-    <FxCompile Include="PS_PCTNTBJW_TEX_ONLY.hlsl">
-      <Filter>Shaders\Pixel</Filter>
+    <FxCompile Include="..\Shaders\VS_PCTNTBJW.hlsl">
+      <Filter>Shaders\Vertex</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\VS_DebugLines.hlsl">
+      <Filter>Shaders\Vertex</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Lighting_Calculations.hlsli">
+    <None Include="..\Shaders\Lighting_Calculations.hlsli">
       <Filter>Shaders\Header</Filter>
     </None>
   </ItemGroup>
