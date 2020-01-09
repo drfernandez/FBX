@@ -173,6 +173,7 @@
     <ClInclude Include="ModelManager.h" />
     <ClInclude Include="PixelShaderManager.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="StaticModel.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TextureManager.h" />
@@ -197,6 +198,7 @@
     <ClCompile Include="DynamicModel.cpp" />
     <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="PixelShaderManager.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="StaticModel.cpp" />
     <ClCompile Include="Structures.cpp" />
     <ClCompile Include="TextureManager.cpp" />
@@ -249,6 +251,9 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Test.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

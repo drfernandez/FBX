@@ -43,6 +43,9 @@
     <Filter Include="Managers\Source">
       <UniqueIdentifier>{b4ef3c8c-4061-4b75-8401-554f5709055d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{c7802135-e625-4f50-8078-7458cb6f633f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header.h">
@@ -117,6 +120,9 @@
     <ClInclude Include="ModelManager.h">
       <Filter>Managers\Header</Filter>
     </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Managers\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Window.cpp">
@@ -179,6 +185,9 @@
     <ClCompile Include="Structures.cpp">
       <Filter>Structures\Source</Filter>
     </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Managers\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Window.rc">
@@ -223,5 +232,10 @@
     <None Include="..\Shaders\Lighting_Calculations.hlsli">
       <Filter>Shaders\Header</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Test.txt">
+      <Filter>Scene</Filter>
+    </Text>
   </ItemGroup>
 </Project>

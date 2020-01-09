@@ -1178,6 +1178,7 @@ void FBXINOUT::FBX::LoadPolygons(FbxMesh* pMesh)
 				FbxGeometryElementTangent* lVertexTangent = pMesh->GetElementTangent(l);
 				vert.tangent = FindVertexTangent(lVertexTangent, lControlPointIndex, vertexId);
 			}
+
 			for (int l = 0; l < pMesh->GetElementBinormalCount(); ++l)
 			{
 				FbxGeometryElementBinormal* lVertexBinormal = pMesh->GetElementBinormal(l);

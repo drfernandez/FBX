@@ -390,12 +390,35 @@ bool D3DRenderer::Initialize(HWND hWnd, unsigned int nWidth, unsigned int nHeigh
 	//	}
 	//}
 
+	{
+		std::string meshname = "../Assets/Box_Idle.msh";
+		std::string posename = "../Assets/Box_Idle.pose";
+		std::string animationnames[2] =
+		{
+			"../Assets/Box_Idle.anim",
+		};
+		std::vector<std::string> animnamevector;
+		for (size_t i = 0; i < ARRAYSIZE(animationnames); i++)
+		{
+			animnamevector.push_back(animationnames[i].c_str());
+		}
+
+		m_ModelManager->AddDynamicModel("Box_Idle", meshname, posename, animnamevector);
+		DynamicModel* model = m_ModelManager->GetDynamicModel("Box_Idle");
+		if (model)
+		{
+			DirectX::XMMATRIX result = DirectX::XMMatrixMultiply(DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f), DirectX::XMMatrixScaling(30.0f, 30.0f, 30.0f));
+			model->SetWorldMatrix(result);
+		}
+	}
+
 	//{
-	//	std::string meshname = "../Assets/Box_Idle.msh";
-	//	std::string posename = "../Assets/Box_Idle.pose";
-	//	std::string animationnames[2] =
+	//	std::string meshname = "../Assets/zombiecop.msh";
+	//	std::string posename = "../Assets/zombiecop.pose";
+	//	std::string animationnames[2] = 
 	//	{
-	//		"../Assets/Box_Idle.anim",
+	//		"../Assets/zombiecopidle0.anim",
+	//		"../Assets/zombiecopscratch.anim"
 	//	};
 	//	std::vector<std::string> animnamevector;
 	//	for (size_t i = 0; i < ARRAYSIZE(animationnames); i++)
@@ -403,57 +426,34 @@ bool D3DRenderer::Initialize(HWND hWnd, unsigned int nWidth, unsigned int nHeigh
 	//		animnamevector.push_back(animationnames[i].c_str());
 	//	}
 
-	//	m_ModelManager->AddDynamicModel("Box_Idle", meshname, posename, animnamevector);
-	//	DynamicModel* model = m_ModelManager->GetDynamicModel("Box_Idle");
+	//	m_ModelManager->AddDynamicModel("ZombieCop", meshname, posename, animnamevector);
+	//	DynamicModel* model = m_ModelManager->GetDynamicModel("ZombieCop");
 	//	if (model)
-	//	{
-	//		DirectX::XMMATRIX result = DirectX::XMMatrixMultiply(DirectX::XMMatrixTranslation(0.0f, 0.0f, 5.0f), DirectX::XMMatrixScaling(30.0f, 30.0f, 30.0f));
-	//		model->SetWorldMatrix(result);
+	//	{ 
+	//		model->SetWorldMatrix(DirectX::XMMatrixTranslation(100.0f, 0.0f, 0.0f));
 	//	}
 	//}
 
-	{
-		std::string meshname = "../Assets/zombiecop.msh";
-		std::string posename = "../Assets/zombiecop.pose";
-		std::string animationnames[2] = 
-		{
-			"../Assets/zombiecopidle0.anim",
-			"../Assets/zombiecopscratch.anim"
-		};
-		std::vector<std::string> animnamevector;
-		for (size_t i = 0; i < ARRAYSIZE(animationnames); i++)
-		{
-			animnamevector.push_back(animationnames[i].c_str());
-		}
+	//{
+	//	std::string meshname = "../Assets/kachujin.msh";
+	//	std::string posename = "../Assets/kachujin.pose";
+	//	std::string animationnames[1] = 
+	//	{
+	//		"../Assets/kachujinidle.anim",
+	//	};
+	//	std::vector<std::string> animnamevector;
+	//	for (size_t i = 0; i < ARRAYSIZE(animationnames); i++)
+	//	{
+	//		animnamevector.push_back(animationnames[i].c_str());
+	//	}
 
-		m_ModelManager->AddDynamicModel("ZombieCop", meshname, posename, animnamevector);
-		DynamicModel* model = m_ModelManager->GetDynamicModel("ZombieCop");
-		if (model)
-		{ 
-			model->SetWorldMatrix(DirectX::XMMatrixTranslation(100.0f, 0.0f, 0.0f));
-		}
-	}
-
-	{
-		std::string meshname = "../Assets/kachujin.msh";
-		std::string posename = "../Assets/kachujin.pose";
-		std::string animationnames[1] = 
-		{
-			"../Assets/kachujinidle.anim",
-		};
-		std::vector<std::string> animnamevector;
-		for (size_t i = 0; i < ARRAYSIZE(animationnames); i++)
-		{
-			animnamevector.push_back(animationnames[i].c_str());
-		}
-
-		m_ModelManager->AddDynamicModel("Kachujin", meshname, posename, animnamevector);
-		DynamicModel* model = m_ModelManager->GetDynamicModel("Kachujin");
-		if (model)
-		{ 
-			model->SetWorldMatrix(DirectX::XMMatrixTranslation(-100.0f, 0.0f, 0.0f));
-		}
-	}
+	//	m_ModelManager->AddDynamicModel("Kachujin", meshname, posename, animnamevector);
+	//	DynamicModel* model = m_ModelManager->GetDynamicModel("Kachujin");
+	//	if (model)
+	//	{ 
+	//		model->SetWorldMatrix(DirectX::XMMatrixTranslation(-100.0f, 0.0f, 0.0f));
+	//	}
+	//}
 
 
 	CreateFloor();

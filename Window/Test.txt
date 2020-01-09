@@ -1,0 +1,28 @@
+#noo 3
+
+#type static
+#name Skybox
+#mesh sphere.msh
+#shdr SKYBOX SKYBOX
+#txd nightsky.dds
+#txn none
+#txs none
+#matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
+
+#type static
+#name Floor
+#mesh floor.msh
+#shdr PCTNTBJW PCTNTBJW
+#txd 165-diffuse.jpg
+#txn 165-normal.jpg
+#txs 165-spec.jpg
+#matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
+
+#type dynamic
+#name Box_Idle
+#mesh Box_Idle.msh
+#pose Box_Idle.pose
+#noa 1
+#anim Box_Idle.anim
+#shdr PCTNTBJW_ANIM PCTNTBJW
+#matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1

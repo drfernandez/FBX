@@ -39,7 +39,7 @@ TextureManager * TextureManager::GetInstance(void)
 	return &instance;
 }
 
-void TextureManager::Initialize(ID3D11Device * pDevice, ID3D11DeviceContext* pContext)
+void TextureManager::Initialize(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
 	m_Device = pDevice;
 	m_Context = pContext;
@@ -73,9 +73,6 @@ INT TextureManager::AddTexture(const std::string & pFilename, TM_TYPE type)
 		m_DiffuseSearchMapIter = m_DiffuseSearchMap.find(pFilename);
 		if (m_DiffuseSearchMapIter == m_DiffuseSearchMap.end())
 		{
-			index = (INT)m_Diffuse.size();
-			m_DiffuseSearchMap[pFilename] = index;
-
 			switch (ParseFileExtension(pFilename))
 			{
 			case 0:
@@ -88,7 +85,12 @@ INT TextureManager::AddTexture(const std::string & pFilename, TM_TYPE type)
 				break;
 			};
 
-			m_Diffuse.push_back(srv);
+			if (!FAILED(hr))
+			{
+				index = (INT)m_Diffuse.size();
+				m_DiffuseSearchMap[pFilename] = index;
+				m_Diffuse.push_back(srv);
+			}
 		}
 		else
 		{
@@ -99,9 +101,6 @@ INT TextureManager::AddTexture(const std::string & pFilename, TM_TYPE type)
 		m_NormalSearchMapIter = m_NormalSearchMap.find(pFilename);
 		if (m_NormalSearchMapIter == m_NormalSearchMap.end())
 		{
-			index = (INT)m_Normal.size();
-			m_NormalSearchMap[pFilename] = index;
-
 			switch (ParseFileExtension(pFilename))
 			{
 			case 0:
@@ -114,7 +113,12 @@ INT TextureManager::AddTexture(const std::string & pFilename, TM_TYPE type)
 				break;
 			};
 
-			m_Normal.push_back(srv);
+			if (!FAILED(hr))
+			{
+				index = (INT)m_Normal.size();
+				m_NormalSearchMap[pFilename] = index;
+				m_Normal.push_back(srv);
+			}
 		}
 		else
 		{
@@ -125,9 +129,6 @@ INT TextureManager::AddTexture(const std::string & pFilename, TM_TYPE type)
 		m_SpecularSearchMapIter = m_SpecularSearchMap.find(pFilename);
 		if (m_SpecularSearchMapIter == m_SpecularSearchMap.end())
 		{
-			index = (INT)m_Specular.size();
-			m_SpecularSearchMap[pFilename] = index;
-
 			switch (ParseFileExtension(pFilename))
 			{
 			case 0:
@@ -140,7 +141,12 @@ INT TextureManager::AddTexture(const std::string & pFilename, TM_TYPE type)
 				break;
 			};
 
-			m_Specular.push_back(srv);
+			if (!FAILED(hr))
+			{
+				index = (INT)m_Specular.size();
+				m_SpecularSearchMap[pFilename] = index;
+				m_Specular.push_back(srv);
+			}
 		}
 		else
 		{
