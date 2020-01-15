@@ -355,16 +355,21 @@ bool D3DRenderer::Initialize(HWND hWnd, unsigned int nWidth, unsigned int nHeigh
 	////////////////////////////////////////////////////////////////////////////////
 	// Mesh loading
 	{
-		std::string meshname = "../Assets/sphere.msh";
+		std::string meshname = "../Assets/sphere2.msh";
 		m_ModelManager->AddStaticModel("Skybox", meshname);
 		StaticModel* model = m_ModelManager->GetStaticModel("Skybox");
 		if (model)
 		{
-			for (size_t i = 0; i < model->GetMeshes().size(); i++)
-			{
-				model->GetMeshes()[i]->m_TextureDiffuseID = m_TextureManager->AddTexture("../Assets/skybox.fbm/nightsky.dds", TextureManager::TM_TYPE::DIFFUSE);
-			}
 			model->SetWorldMatrix(DirectX::XMMatrixTranslation(m_Camera.r[3].m128_f32[0], m_Camera.r[3].m128_f32[1], m_Camera.r[3].m128_f32[2]));
+		}
+	}
+	{
+		std::string meshname = "../Assets/floor.msh";
+		m_ModelManager->AddStaticModel("Floor", meshname);
+		StaticModel* model = m_ModelManager->GetStaticModel("Floor");
+		if (model)
+		{
+			//model->SetWorldMatrix(DirectX::XMMatrixTranslation(m_Camera.r[3].m128_f32[0], m_Camera.r[3].m128_f32[1], m_Camera.r[3].m128_f32[2]));
 		}
 	}
 
@@ -456,7 +461,7 @@ bool D3DRenderer::Initialize(HWND hWnd, unsigned int nWidth, unsigned int nHeigh
 	//}
 
 
-	CreateFloor();
+	//CreateFloor();
 	////////////////////////////////////////////////////////////////////////////////
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -801,7 +806,7 @@ bool D3DRenderer::Draw(UINT vSync)
 		DrawStaticModel(model);
 	}
 
-	DrawMesh(m_Floor);
+	//DrawMesh(m_Floor);
 	////////////////////////////////////////////////////////////////////////////////
 
 	////////////////////////////////////////////////////////////////////////////////
