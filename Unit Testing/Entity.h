@@ -34,26 +34,16 @@ private:
 public:
     Entity()
     {
-
+        components.clear();
     }
 
     ~Entity()
     {
-
+        components.clear();
     }
 
-    Entity(const Entity& that)
-    {
-        *this = that;
-    }
-    Entity& operator=(const Entity& that)
-    {
-        if (this != &that)
-        {
-
-        }
-        return *this;
-    }
+    Entity(const Entity& that) = delete;
+    Entity& operator=(const Entity& that) = delete;
 
     template <typename T>
     T& get_component()
@@ -73,5 +63,22 @@ public:
         components.emplace(ClassID_v<T>, std::make_unique<T>(std::forward<Args>(args)...));
         return *this;
     }
+
+    void update()
+    {
+        for (auto& c : components)
+        {
+            c.second->update();
+        }
+    }
+
+    void render()
+    {
+        for (auto& c : components)
+        {
+            c.second->render();
+        }
+    }
+
 };
 
