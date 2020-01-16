@@ -44,7 +44,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     }
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_WINDOW));
-    MSG msg;
+    MSG msg = { 0 };
 
 	RECT window_rect;
 	GetClientRect(hWnd, &window_rect);

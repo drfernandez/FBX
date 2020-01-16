@@ -3,6 +3,7 @@
 #include <vector>
 #include <DirectXMath.h>
 #include "Vertex.h"
+#include <string>
 
 struct Mesh
 {
