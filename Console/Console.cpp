@@ -8,7 +8,15 @@
 
 int main()
 {
-	using FuncPtr = void(*)(const char*, const char*, const char*, const char*,	bool, bool);
+	using FuncPtr = void(*)(
+		const char*,
+		const char*,
+		const char*,
+		const char*,
+		bool,
+		bool
+		);
+
 	std::function<void(const char*, const char*, const char*, const char*, bool, bool)> func;
 
 	HMODULE mod = LoadLibrary(L"FBXINOUT.dll");
@@ -16,15 +24,19 @@ int main()
 
 	if (func_ptr)
 		func_ptr(
-			"../Assets/floor.fbx",
-			"../Assets/floor.msh",
-			"../Assets/floor.pose",
-			"../Assets/floor.anim",
+			//"../Assets/BattleMage_Run.fbx", 
+			//"../Assets/BattleMage_Run.msh",
+			//"../Assets/BattleMage_Run.pose",
+			//"../Assets/BattleMage_Run.anim",
+			"../Assets/Box_Idle.fbx",
+			"../Assets/Box_Idle.msh",
+			"../Assets/Box_Idle.pose",
+			"../Assets/Box_Idle.anim",
 			true,
 			true
 		);
 
-	bool isModuleFree = FreeLibrary(mod);
+	bool freed = FreeLibrary(mod);
 
 	return 0;
 }
