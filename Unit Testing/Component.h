@@ -5,7 +5,7 @@
 class Component
 {
 private:
-	
+
 public:
 	Component() { }
 	virtual ~Component() { }
@@ -41,7 +41,7 @@ public:
 class NameComponent : public Component
 {
 private:
-	std::string name;
+	std::string name = " ";
 
 public:
 	NameComponent() = default;
