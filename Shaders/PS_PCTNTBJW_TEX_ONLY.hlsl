@@ -1,6 +1,5 @@
 
 Texture2D diffuse : register(t0);
-
 SamplerState filter : register(s0);
 
 struct PS_IN
