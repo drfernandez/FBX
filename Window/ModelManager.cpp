@@ -67,9 +67,9 @@ DynamicModel * ModelManager::GetDynamicModel(std::string name)
 	DynamicModel* return_value = nullptr;
 	for (size_t i = 0; i < m_vDynamicModels.size(); i++)
 	{
-		if (name == m_vDynamicModels[(int)i]->GetName())
+		if (name == m_vDynamicModels[i]->GetName())
 		{
-			return_value = m_vDynamicModels[(int)i];
+			return_value = m_vDynamicModels[i];
 			break;
 		}
 	}
@@ -91,9 +91,9 @@ StaticModel * ModelManager::GetStaticModel(std::string name)
 	StaticModel* return_value = nullptr;
 	for (size_t i = 0; i < m_vStaticModels.size(); i++)
 	{
-		if (name == m_vStaticModels[(int)i]->GetName())
+		if (name == m_vStaticModels[i]->GetName())
 		{
-			return_value = m_vStaticModels[(int)i];
+			return_value = m_vStaticModels[i];
 			break;
 		}
 	}

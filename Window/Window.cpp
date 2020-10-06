@@ -66,7 +66,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		{ 
 			// WM_QUIT does not need to be 
 			// translated or dispatched 
-			if (msg.message == WM_QUIT) break; 
+			if (msg.message == WM_QUIT) 
+                break; 
 			// Translates messages and sends them to WndProc 
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);

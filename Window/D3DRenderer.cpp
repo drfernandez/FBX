@@ -568,7 +568,7 @@ bool D3DRenderer::Update(const float & delta)
 
 	////////////////////////////////////////////////////////////////////////////////
 	// update camera and projection matrix
-	MoveCamera(delta, 80.0f, 0.10f, 0.15f);
+	MoveCamera(delta, 80.0f, 0.50f, 0.55f);
 	m_ViewProj.view = DirectX::XMMatrixInverse(nullptr, m_Camera);
 	m_ViewProj.proj = m_Projection;
 	m_Context->UpdateSubresource(m_ConstantBuffer[CB_TYPE::VIEWPROJ], 0, nullptr, &m_ViewProj, 0, 0);

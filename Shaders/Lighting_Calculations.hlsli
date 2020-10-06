@@ -60,17 +60,17 @@ float3 CalculateSpotLight(LIGHT light, float3 surface_position, float3 surface_n
 
 float CalculateSpecular(float3 to_light, float3 camera_position, float3 surface_position, float3 surface_normal, float spec_power, float spec_intensity)
 {
-	// Create a vector to the camera from the surface
-	float3 toCamera = normalize(camera_position - surface_position);
-	// Create a reflection vector from the light direction and the surface normal
-	float3 reflectVector = normalize(reflect(-to_light, surface_normal));
-	// Find the angle between the vector to the camera and the reflection vector
-	float dot_result = saturate(dot(toCamera, reflectVector));
-	// Raise the dot product result to a certain power
-	float intensity = pow(dot_result, spec_power);
-	// Find the light's ratio on the surface
-	float light_ratio = saturate(dot(to_light, surface_normal));
-	// Return the specular intensity and the intensity of the specular highlight
+    // Create a vector to the camera from the surface
+    float3 toCamera = normalize(camera_position - surface_position);
+    // Create a reflection vector from the light direction and the surface normal
+    float3 reflectVector = normalize(reflect(-to_light, surface_normal));
+    // Find the angle between the vector to the camera and the reflection vector
+    float dot_result = saturate(dot(toCamera, reflectVector));
+    // Raise the dot product result to a certain power
+    float intensity = pow(dot_result, spec_power);
+    // Find the light's ratio on the surface
+    float light_ratio = saturate(dot(to_light, surface_normal));
+    // Return the specular intensity and the intensity of the specular highlight
     return saturate(intensity * spec_intensity * light_ratio);
 }
 
