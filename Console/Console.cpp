@@ -28,10 +28,10 @@ int main()
 			//"../Assets/BattleMage_Run.msh",
 			//"../Assets/BattleMage_Run.pose",
 			//"../Assets/BattleMage_Run.anim",
-			"../Assets/Box_Idle.fbx",
-			"../Assets/Box_Idle.msh",
-			"../Assets/Box_Idle.pose",
-			"../Assets/Box_Idle.anim",
+			"../Assets/zombiecop_thriller.fbx",
+			"../Assets/zombiecop_thriller.msh",
+			"../Assets/zombiecop_thriller.pose",
+			"../Assets/zombiecop_thriller.anim",
 			true,
 			true
 		);

@@ -415,10 +415,12 @@ bool D3DRenderer::Initialize(HWND hWnd, unsigned int nWidth, unsigned int nHeigh
 	{
 		std::string meshname = "../Assets/zombiecop.msh";
 		std::string posename = "../Assets/zombiecop.pose";
-		std::string animationnames[2] = 
+		std::string animationnames[] = 
 		{
-			"../Assets/zombiecopidle0.anim",
-			"../Assets/zombiecopscratch.anim"
+			"../Assets/zombiecop_idle0.anim",
+			"../Assets/zombiecop_scratch.anim",
+			"../Assets/zombiecop_thriller.anim"
+
 		};
 		std::vector<std::string> animnamevector;
 		for (size_t i = 0; i < ARRAYSIZE(animationnames); i++)
@@ -437,9 +439,11 @@ bool D3DRenderer::Initialize(HWND hWnd, unsigned int nWidth, unsigned int nHeigh
 	{
 		std::string meshname = "../Assets/kachujin.msh";
 		std::string posename = "../Assets/kachujin.pose";
-		std::string animationnames[1] = 
+		std::string animationnames[] = 
 		{
-			"../Assets/kachujinidle.anim",
+			"../Assets/kachujin_idle.anim",
+			"../Assets/kachujin_macarena.anim",
+			"../Assets/kachujin_twerk.anim"
 		};
 		std::vector<std::string> animnamevector;
 		for (size_t i = 0; i < ARRAYSIZE(animationnames); i++)
@@ -497,7 +501,7 @@ bool D3DRenderer::Initialize(HWND hWnd, unsigned int nWidth, unsigned int nHeigh
 		DirectX::XMConvertToRadians(65.0f),					// field of view
 		(float)nWidth / (float)nHeight,						// aspect ratio
 		0.1f,												// near plane
-		100000.0f											// far plane
+		10000.0f											// far plane
 	);
 	////////////////////////////////////////////////////////////////////////////////
 
@@ -579,9 +583,9 @@ bool D3DRenderer::Update(const float & delta)
 	StaticModel* model = m_ModelManager->GetStaticModel("Skybox");
 	if (model)
 	{
-		float x = m_Camera.r[3].m128_f32[0];
-		float y = m_Camera.r[3].m128_f32[1];
-		float z = m_Camera.r[3].m128_f32[2];
+		float x = DirectX::XMVectorGetX(m_Camera.r[3]);
+		float y = DirectX::XMVectorGetY(m_Camera.r[3]);
+		float z = DirectX::XMVectorGetZ(m_Camera.r[3]);
 		model->SetWorldMatrix(DirectX::XMMatrixTranslation(x, y, z));
 	}
 	////////////////////////////////////////////////////////////////////////////////
@@ -592,7 +596,7 @@ bool D3DRenderer::Update(const float & delta)
 	////////////////////////////////////////////////////////////////////////////////
 
 	////////////////////////////////////////////////////////////////////////////////
-	float delta_inc = delta * 0.5f;
+	float delta_inc = delta;// *0.5f;
 	if (m_bPauseAnimation)
 	{
 		delta_inc = 0.0f;
