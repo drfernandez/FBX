@@ -24,7 +24,7 @@
 class D3DRenderer
 {
 public:
-	enum CB_TYPE { WORLD = 0, VIEWPROJ, CURR_POSE, CAMERA, LIGHTS, CB_COUNT };
+	enum CB_TYPE { WORLD = 0, VIEWPROJ, CURR_POSE, CAMERA, LIGHTS, USETEXTURE, CB_COUNT };
 	enum RS_TYPE { SOLID = 0, WIREFRAME, CULL_NONE, CULL_NONE_WIREFRAME, RS_COUNT };
 private:
 	// Singleton closure of functions

@@ -28,6 +28,10 @@ void D3DRenderer::DrawMesh(const std::vector<Mesh*>& mesh)
 		};
 		m_Context->PSSetShaderResources(0, 3, textures);
 		m_Context->UpdateSubresource(m_ConstantBuffer[CB_TYPE::WORLD], 0, nullptr, &mesh[i]->m_WorldMatrix, 0, 0);
+
+		BOOL use_texture = (textures[0]) ? TRUE : FALSE;		
+		m_Context->UpdateSubresource(m_ConstantBuffer[CB_TYPE::USETEXTURE], 0, nullptr, &use_texture, 0, 0);
+
 		m_Context->DrawIndexed(mesh[i]->m_IndexTotal, mesh[i]->m_IndexOffset, mesh[i]->m_VertOffset);
 	}
 }
@@ -176,10 +180,10 @@ void D3DRenderer::SetupLights(void)
 
 void D3DRenderer::MoveCamera(const float & delta, const float & move_speed, const float & rot_speed_x, const float& rot_speed_y)
 {
-	if (m_Camera.r[3].m128_f32[1] < 15.0f)
-	{
-		m_Camera.r[3].m128_f32[1] = 15.0f;
-	}
+	//if (m_Camera.r[3].m128_f32[1] < 15.0f)
+	//{
+	//	m_Camera.r[3].m128_f32[1] = 15.0f;
+	//}
 	if (m_InputManager->GetKeyboardButton((int)'W'))
 	{
 		DirectX::XMMATRIX t = DirectX::XMMatrixTranslation(0.0f, 0.0f, move_speed * delta);
@@ -227,27 +231,27 @@ void D3DRenderer::MoveCamera(const float & delta, const float & move_speed, cons
 
 		m_Camera.r[3] = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
 
-		clampMatrix = DirectX::XMMatrixMultiply(rotationX, m_Camera);
-		clampMatrix = DirectX::XMMatrixMultiply(m_Camera, rotationY);
-		clampMatrix.r[3] = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+		//clampMatrix = DirectX::XMMatrixMultiply(rotationX, m_Camera);
+		//clampMatrix = DirectX::XMMatrixMultiply(m_Camera, rotationY);
+		//clampMatrix.r[3] = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
 
-		DirectX::XMVECTOR dotResult = DirectX::XMVector3Dot(clampMatrix.r[2], worldUp);
-		if (dotResult.m128_f32[0] < 0.99f)
-		{
-			if (dy < 0)
-			{
+		//DirectX::XMVECTOR dotResult = DirectX::XMVector3Dot(clampMatrix.r[2], worldUp);
+		//if (dotResult.m128_f32[0] < 0.99f)
+		//{
+		//	if (dy < 0)
+		//	{
 				m_Camera = DirectX::XMMatrixMultiply(rotationX, m_Camera);
-			}
+			//}
 			m_Camera = DirectX::XMMatrixMultiply(m_Camera, rotationY);
-		}
-		if (dotResult.m128_f32[0] > -0.99f)
-		{
-			if (dy > 0)
-			{
-				m_Camera = DirectX::XMMatrixMultiply(rotationX, m_Camera);
-			}
-			m_Camera = DirectX::XMMatrixMultiply(m_Camera, rotationY);
-		}
+		//}
+		//if (dotResult.m128_f32[0] > -0.99f)
+		//{
+		//	if (dy > 0)
+		//	{
+		//		m_Camera = DirectX::XMMatrixMultiply(rotationX, m_Camera);
+		//	}
+		//	m_Camera = DirectX::XMMatrixMultiply(m_Camera, rotationY);
+		//}
 		m_Camera.r[3] = position;
 	}
 
@@ -459,6 +463,17 @@ bool D3DRenderer::Initialize(HWND hWnd, unsigned int nWidth, unsigned int nHeigh
 		}
 	}
 
+	{
+		std::string meshname = "../Assets/capsule.msh";
+
+		m_ModelManager->AddStaticModel("Capsule", meshname);
+		StaticModel* model = m_ModelManager->GetStaticModel("Capsule");
+		if (model)
+		{
+			model->SetWorldMatrix(DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f));			
+		}
+	}
+
 
 	CreateFloor();
 	////////////////////////////////////////////////////////////////////////////////
@@ -529,6 +544,9 @@ bool D3DRenderer::Initialize(HWND hWnd, unsigned int nWidth, unsigned int nHeigh
 
 	const_buffer_desc.ByteWidth = sizeof(CB_LIGHT);
 	hr = m_Device->CreateBuffer(&const_buffer_desc, nullptr, &m_ConstantBuffer[CB_TYPE::LIGHTS]);
+
+	const_buffer_desc.ByteWidth = sizeof(BOOL) * 4;
+	hr = m_Device->CreateBuffer(&const_buffer_desc, nullptr, &m_ConstantBuffer[CB_TYPE::USETEXTURE]);
 	////////////////////////////////////////////////////////////////////////////////
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -568,7 +586,7 @@ bool D3DRenderer::Update(const float & delta)
 	// TODO: add timer class to window.cpp
 	// this is per frame incrementation for rotating this test mesh
 	static float elapsed_time = 0.0f;
-	//elapsed_time += delta;
+	elapsed_time += delta;
 
 	////////////////////////////////////////////////////////////////////////////////
 	// update camera and projection matrix
@@ -592,7 +610,16 @@ bool D3DRenderer::Update(const float & delta)
 
 
 	////////////////////////////////////////////////////////////////////////////////
+	StaticModel* capsule = m_ModelManager->GetStaticModel("Capsule");
+	if (capsule)
+	{
+		DirectX::XMMATRIX t = DirectX::XMMatrixTranslation(0, 5, 0);
+		DirectX::XMMATRIX s = DirectX::XMMatrixScaling(15, 15, 15);
+		DirectX::XMMATRIX r = DirectX::XMMatrixRotationY(elapsed_time);
 
+
+		capsule->SetWorldMatrix(DirectX::XMMatrixMultiply(r, DirectX::XMMatrixMultiply(t, s)));
+	}
 	////////////////////////////////////////////////////////////////////////////////
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -695,6 +722,24 @@ bool D3DRenderer::Update(const float & delta)
 		m_bPauseAnimation = true;
 	}
 
+	static int anim_index = 0;
+	if (m_InputManager->GetKeyboardButton((int)VK_NUMPAD0))
+	{
+		anim_index = 0;
+	}
+	if (m_InputManager->GetKeyboardButton((int)VK_NUMPAD1))
+	{
+		anim_index = 1;
+	}
+	if (m_InputManager->GetKeyboardButton((int)VK_NUMPAD2))
+	{
+		anim_index = 2;
+	}
+
+	DynamicModel* dynamodel = m_ModelManager->GetDynamicModel("Kachujin");
+	Animation* anim = dynamodel->GetAnimations()[anim_index];
+	dynamodel->GetAnimationInterpolator().SetAnimation(anim);
+
 	return true;
 }
 
@@ -768,6 +813,7 @@ bool D3DRenderer::Draw(UINT vSync)
 	m_Context->VSSetConstantBuffers(0, ARRAYSIZE(constant_buffer), constant_buffer);
 	m_Context->PSSetConstantBuffers(0, 1, &m_ConstantBuffer[CB_TYPE::CAMERA]);
 	m_Context->PSSetConstantBuffers(1, 1, &m_ConstantBuffer[CB_TYPE::LIGHTS]);
+	m_Context->PSSetConstantBuffers(2, 1, &m_ConstantBuffer[CB_TYPE::USETEXTURE]);
 	m_Context->PSSetSamplers(0, 1, &m_SamplerState);
 	////////////////////////////////////////////////////////////////////////////////
 

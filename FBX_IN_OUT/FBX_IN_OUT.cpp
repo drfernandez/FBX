@@ -67,7 +67,7 @@ FBXINOUT_API BOOL FBXINOUT::ExportFbxDataFromFile(
 		}
 
 		FBXSDK_printf("Trying to triangulate mesh...\n");
-		lResult = converter.Triangulate(lScene, false);
+		lResult = converter.Triangulate(lScene, false, true);
 		if (lResult)
 		{
 			FBXSDK_printf("\t Triangulation of mesh was successful!\n");

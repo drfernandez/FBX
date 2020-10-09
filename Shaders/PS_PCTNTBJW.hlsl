@@ -29,19 +29,20 @@ cbuffer CB_LIGHT : register(b1)
     LIGHT light_array[MAXLIGHTS];
 }
 
-float4 main(PS_IN input) : SV_TARGET
+cbuffer CB_USETEXTURE : register(b2)
 {
+    bool use_texture;
+    bool3 padding;
+}
+
+float4 main(PS_IN input) : SV_TARGET
+{    
     float4 diff_tex = diffuse.Sample(filter, input.texcoord);
     float4 norm_tex = normal.Sample(filter, input.texcoord);
     float4 spec_tex = specular.Sample(filter, input.texcoord);
         
     float3 color = float3(0.0f, 0.0f, 0.0f);
     float3 ambient = float3(0.0f, 0.0f, 0.0f);
-
-    if(diff_tex.a <= 0.1f)
-    {
-        discard;
-    }
 
     matrix tbn = matrix(
         normalize(float4(input.tangent.xyz, 0)),
@@ -51,7 +52,8 @@ float4 main(PS_IN input) : SV_TARGET
     );
 
     float4 normal = normalize(norm_tex * 2.0f - 1.0f);
-    normal = normalize(mul(float4(normal.xyz, 0), tbn));
+    normal = (use_texture) ? normalize(mul(float4(normal.xyz, 0), tbn)) : normalize(input.normal);
+    spec_tex.r = (use_texture) ? spec_tex.r : 1.0f;
     
     int num_lights = clamp(int(light_data.x), 0, 100);
     for (int i = 0; i < num_lights; ++i)
@@ -59,7 +61,7 @@ float4 main(PS_IN input) : SV_TARGET
         switch (int(light_array[i].position.w))
         {
             case AMBIENT:
-                ambient += float3(light_array[i].color.xyz * diff_tex.xyz);
+                ambient += (use_texture) ? float3(light_array[i].color.xyz * diff_tex.xyz) : float3(0.3f, 0.3f, 0.3f);
                 break;
             case DIRECTIONAL:
                 color.xyz += AddDirectionalLight(light_array[i], input.world_pos.xyz, normal.xyz, camera_pos.xyz, spec_tex.r);
@@ -74,8 +76,8 @@ float4 main(PS_IN input) : SV_TARGET
                 break;
         }
     }
-
-    color.xyz *= diff_tex.xyz;
+    
+    color.xyz *= (use_texture) ? diff_tex.xyz : input.color;
     color.xyz += ambient.xyz;
 
     return saturate(float4(color.xyz, diff_tex.a));
