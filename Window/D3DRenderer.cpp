@@ -29,7 +29,7 @@ void D3DRenderer::DrawMesh(const std::vector<Mesh*>& mesh)
 		m_Context->PSSetShaderResources(0, 3, textures);
 		m_Context->UpdateSubresource(m_ConstantBuffer[CB_TYPE::WORLD], 0, nullptr, &mesh[i]->m_WorldMatrix, 0, 0);
 
-		BOOL use_texture = (textures[0]) ? TRUE : FALSE;		
+		BOOL use_texture = (textures[0]) ? TRUE : FALSE;
 		m_Context->UpdateSubresource(m_ConstantBuffer[CB_TYPE::USETEXTURE], 0, nullptr, &use_texture, 0, 0);
 
 		m_Context->DrawIndexed(mesh[i]->m_IndexTotal, mesh[i]->m_IndexOffset, mesh[i]->m_VertOffset);
@@ -126,7 +126,7 @@ void D3DRenderer::SetupLights(void)
 	LIGHT ambient;
 	LIGHT directional;
 	LIGHT point;
-	//LIGHT spot;
+	LIGHT spot;
 
 	ZeroMemory(&ambient, sizeof(LIGHT));
 	ambient.position		= DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
@@ -465,12 +465,11 @@ bool D3DRenderer::Initialize(HWND hWnd, unsigned int nWidth, unsigned int nHeigh
 
 	{
 		std::string meshname = "../Assets/capsule.msh";
-
-		m_ModelManager->AddStaticModel("Capsule", meshname);
-		StaticModel* model = m_ModelManager->GetStaticModel("Capsule");
-		if (model)
+		m_ModelManager->AddStaticModel("Object", meshname);
+		StaticModel* object = m_ModelManager->GetStaticModel("Object");
+		if (object)
 		{
-			model->SetWorldMatrix(DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f));			
+			object->SetWorldMatrix(DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f));
 		}
 	}
 
@@ -610,15 +609,15 @@ bool D3DRenderer::Update(const float & delta)
 
 
 	////////////////////////////////////////////////////////////////////////////////
-	StaticModel* capsule = m_ModelManager->GetStaticModel("Capsule");
-	if (capsule)
+	StaticModel* object = m_ModelManager->GetStaticModel("Object");
+	if (object)
 	{
 		DirectX::XMMATRIX t = DirectX::XMMatrixTranslation(0, 5, 0);
 		DirectX::XMMATRIX s = DirectX::XMMatrixScaling(15, 15, 15);
 		DirectX::XMMATRIX r = DirectX::XMMatrixRotationY(elapsed_time);
 
 
-		capsule->SetWorldMatrix(DirectX::XMMatrixMultiply(r, DirectX::XMMatrixMultiply(t, s)));
+		object->SetWorldMatrix(DirectX::XMMatrixMultiply(r, DirectX::XMMatrixMultiply(t, s)));
 	}
 	////////////////////////////////////////////////////////////////////////////////
 
@@ -736,9 +735,12 @@ bool D3DRenderer::Update(const float & delta)
 		anim_index = 2;
 	}
 
-	DynamicModel* dynamodel = m_ModelManager->GetDynamicModel("Kachujin");
-	Animation* anim = dynamodel->GetAnimations()[anim_index];
-	dynamodel->GetAnimationInterpolator().SetAnimation(anim);
+	//DynamicModel* dynamodel = m_ModelManager->GetDynamicModel("Kachujin");
+	//Animation* anim = dynamodel->GetAnimations()[anim_index];
+	//dynamodel->GetAnimationInterpolator().SetAnimation(anim);
+	//dynamodel = m_ModelManager->GetDynamicModel("ZombieCop");
+	//anim = dynamodel->GetAnimations()[anim_index];
+	//dynamodel->GetAnimationInterpolator().SetAnimation(anim);
 
 	return true;
 }

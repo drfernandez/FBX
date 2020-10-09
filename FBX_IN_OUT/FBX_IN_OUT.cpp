@@ -11,9 +11,7 @@ FBXINOUT_API BOOL FBXINOUT::ExportFbxDataFromFile(
 	const char* in_file_name, 
 	const char* out_file_name, 
 	const char* out_pose_name,
-	const char* out_anim_name,
-	BOOL export_mesh,
-	BOOL export_animation)
+	const char* out_anim_name)
 {
 	FbxManager* lSdkManager = nullptr;
 	FbxScene* lScene = nullptr;
@@ -83,11 +81,11 @@ FBXINOUT_API BOOL FBXINOUT::ExportFbxDataFromFile(
 		loader.LoadMetaData(lScene);
 		FBXSDK_printf("\n\n");
 
-		if (export_mesh)
+		if (out_file_name)
 		{
 			loader.LoadContent(lScene);
 		}
-		if (export_animation)
+		if (out_anim_name)
 		{
 			loader.LoadAnimationSimple(lScene);
 		}
@@ -98,14 +96,17 @@ FBXINOUT_API BOOL FBXINOUT::ExportFbxDataFromFile(
 	FBXSDK_printf("Writing data to binary files...!\n");
 	BinaryWriter* IO = BinaryWriter::GetInstance();
 	IO->Initialize();
-	if (export_mesh)
+	if (out_file_name)
 	{
 		IO->WriteMeshToFile(out_file_name, loader.GetMesh());
 		FBXSDK_printf("\tWriting mesh data to binary file completed!\n");
+	}
+	if (out_pose_name)
+	{
 		IO->WriteBindPoseToFile(out_pose_name, loader.GetBindPose());
 		FBXSDK_printf("\tWriting pose data to binary file completed!\n");
 	}
-	if (export_animation)
+	if (out_anim_name)
 	{
 		IO->WriteAnimationsToFile(out_anim_name, loader.GetAnimations());
 		FBXSDK_printf("\tWriting animation data to binary file completed!\n");

@@ -40,6 +40,11 @@ float4 main(PS_IN input) : SV_TARGET
     float4 diff_tex = diffuse.Sample(filter, input.texcoord);
     float4 norm_tex = normal.Sample(filter, input.texcoord);
     float4 spec_tex = specular.Sample(filter, input.texcoord);
+    
+    if(use_texture && diff_tex.a <= 0.1f)
+    {
+        discard;
+    }
         
     float3 color = float3(0.0f, 0.0f, 0.0f);
     float3 ambient = float3(0.0f, 0.0f, 0.0f);
@@ -79,7 +84,7 @@ float4 main(PS_IN input) : SV_TARGET
     
     color.xyz *= (use_texture) ? diff_tex.xyz : input.color;
     color.xyz += ambient.xyz;
-
+    
     return saturate(float4(color.xyz, diff_tex.a));
 
 }

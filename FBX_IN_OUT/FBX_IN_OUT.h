@@ -18,9 +18,7 @@ extern "C"
 			const char* in_file_name, 
 			const char* out_file_name, 
 			const char* out_pose_name,
-			const char* out_anim_name,
-			BOOL export_mesh,
-			BOOL export_animation
+			const char* out_anim_name
 		);
 	};
 };
