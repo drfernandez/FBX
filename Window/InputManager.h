@@ -16,7 +16,7 @@ private:
 
 	// data members
 	std::bitset<256>			m_Keyboard;
-	std::bitset<15>				m_Mouse;
+	std::bitset<25>				m_Mouse;
 	POINT						m_MousePos;
 	POINT						m_MousePosPrev;
 

@@ -152,6 +152,7 @@ bool BinaryReader::ReadBindPoseFromFile(const char * filename, std::vector<Joint
 			Joint* temp_joint = new Joint();
 
 			read.read((char*)&temp_joint->matrix, sizeof(DirectX::XMMATRIX));
+			//read.read((char*)&temp_joint->quaternion, sizeof(DirectX::XMVECTOR));
 
 			size_t name_size = 0;
 			read.read((char*)&name_size, sizeof(size_t));
@@ -223,6 +224,8 @@ bool BinaryReader::ReadAnimationsFromFile(const char * filename, std::vector<Ani
 					delete[] joint_name_buffer;
 					// joint matrix
 					read.read((char*)&temp_joint->matrix, sizeof(DirectX::XMMATRIX));
+					// joint quaternion
+					//read.read((char*)&temp_joint->quaternion, sizeof(DirectX::XMVECTOR));
 					// joint parent index
 					read.read((char*)&temp_joint->parent_index, sizeof(int));
 					// push back into the keyframe list

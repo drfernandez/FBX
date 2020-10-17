@@ -350,7 +350,8 @@ void FBXINOUT::FBX::LoadBindPose(FbxScene * pScene)
 
 				Joint joint;
 				FbxNode* pNode = lPose->GetNode(j);
-				joint.matrix = pNode->EvaluateGlobalTransform();
+				FbxAMatrix curr_matrix = pNode->EvaluateGlobalTransform();
+				joint.matrix = (m_SystemConverted) ? ConvertMatrixToSystemCoord(curr_matrix) : curr_matrix;
 				joint.name = pNode->GetName();
 				joint.node = pNode;
 				joint.parent_index = -1;
@@ -439,6 +440,7 @@ void FBXINOUT::FBX::LoadAnimationSimple(FbxScene * pScene)
 				Joint joint = m_MeshBindPose[k];
 				FbxAMatrix curr_matrix = m_MeshBindPose[k].node->EvaluateGlobalTransform(keyTime);
 				joint.matrix = (m_SystemConverted) ? ConvertMatrixToSystemCoord(curr_matrix) : curr_matrix;
+				//joint.quaternion = /*(m_SystemConverted) ? ConvertMatrixToSystemCoord(curr_matrix).GetQ() :*/ curr_matrix.GetQ();
 				keyFrame.joints.push_back(joint);
 			}
 			anim.keyframes.push_back(keyFrame);
@@ -619,7 +621,7 @@ void FBXINOUT::FBX::LoadSkeleton(FbxNode * pNode)
 	Joint joint;
 	FbxAMatrix curr_matrix = pNode->EvaluateGlobalTransform();
 	joint.matrix = (m_SystemConverted) ? ConvertMatrixToSystemCoord(curr_matrix) : curr_matrix;
-	//joint.matrix = pNode->EvaluateGlobalTransform();
+	//joint.quaternion = /*(m_SystemConverted) ? ConvertMatrixToSystemCoord(curr_matrix).GetQ() :*/ curr_matrix.GetQ();
 	joint.name = pNode->GetName();
 	joint.node = pNode;
 	joint.parent_index = -1;
@@ -1198,10 +1200,10 @@ void FBXINOUT::FBX::LoadPolygons(FbxMesh* pMesh)
 				vert.tangent.mData[0] = -vert.tangent.mData[0];
 				vert.binormal.mData[0] = -vert.binormal.mData[0];
 
-				vert.position = Vector4MultiplyMatrix(vert.position, m_Rotate180);
-				vert.normal = Vector4MultiplyMatrix(vert.normal, m_Rotate180);
-				vert.tangent = Vector4MultiplyMatrix(vert.tangent, m_Rotate180);
-				vert.binormal = Vector4MultiplyMatrix(vert.binormal, m_Rotate180);
+				//vert.position = Vector4MultiplyMatrix(vert.position, m_Rotate180);
+				//vert.normal = Vector4MultiplyMatrix(vert.normal, m_Rotate180);
+				//vert.tangent = Vector4MultiplyMatrix(vert.tangent, m_Rotate180);
+				//vert.binormal = Vector4MultiplyMatrix(vert.binormal, m_Rotate180);
 			}
 
 

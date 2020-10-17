@@ -18,6 +18,7 @@ class Joint
 public:
 	std::string					name;
 	DirectX::XMMATRIX			matrix;
+	//DirectX::XMVECTOR			quaternion;
 	int							parent_index;
 
 private:
@@ -25,8 +26,8 @@ private:
 public:
 	Joint(void);
 	~Joint(void);
-	Joint(const Joint& copy) = delete;
-	Joint& operator=(const Joint& copy) = delete;
+	Joint(const Joint& copy);
+	Joint& operator=(const Joint& copy);
 };
 
 class KeyFrame
