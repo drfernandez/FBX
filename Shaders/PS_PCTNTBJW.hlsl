@@ -82,7 +82,7 @@ float4 main(PS_IN input) : SV_TARGET
         }
     }
     
-    color.xyz *= (use_texture) ? diff_tex.xyz : input.color;
+    color.xyz *= (use_texture) ? diff_tex.xyz : input.color.xyz;
     color.xyz += ambient.xyz;
     
     return saturate(float4(color.xyz, diff_tex.a));

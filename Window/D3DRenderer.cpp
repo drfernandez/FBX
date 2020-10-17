@@ -1,7 +1,6 @@
 #include "D3DRenderer.h"
 
-
-void D3DRenderer::AddPoseToDebugRenderer(const std::vector<Joint*> & pose)
+void D3DRenderer::AddPoseToDebugRenderer(const std::vector<Joint*>& pose)
 {
 	for (size_t i = 0; i < pose.size(); i++)
 	{
@@ -168,12 +167,12 @@ void D3DRenderer::SetupLights(void)
 	point.cone_ratio		= DirectX::XMFLOAT4(0.0f, 0.0f, 200.0f, 1.0f);
 	m_LightList.array[light_index++] = point;
 
-	//ZeroMemory(&spot, sizeof(LIGHT));
-	//spot.position			= DirectX::XMFLOAT4(0.0f, 250.0f, 0.0f, 2.0f);
-	//spot.color				= DirectX::XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f);
-	//spot.direction			= DirectX::XMFLOAT4(0.0f, -1.0f, 0.0f, 1.0f);
-	//spot.cone_ratio			= DirectX::XMFLOAT4(0.98f, 0.97f, 300.0f, 1.0f);
-	//m_LightList.array[light_index++] = spot;
+	ZeroMemory(&spot, sizeof(LIGHT));
+	spot.position			= DirectX::XMFLOAT4(0.0f, 250.0f, 0.0f, 3.0f);
+	spot.color				= DirectX::XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f);
+	spot.direction			= DirectX::XMFLOAT4(0.0f, -1.0f, 0.0f, 1.0f);
+	spot.cone_ratio			= DirectX::XMFLOAT4(0.98f, 0.97f, 300.0f, 1.0f);
+	m_LightList.array[light_index++] = spot;
 
 	m_LightList.data.x		= ((FLOAT)light_index < 100) ? (FLOAT)light_index : 100;
 }
@@ -231,27 +230,27 @@ void D3DRenderer::MoveCamera(const float & delta, const float & move_speed, cons
 
 		m_Camera.r[3] = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
 
-		//clampMatrix = DirectX::XMMatrixMultiply(rotationX, m_Camera);
-		//clampMatrix = DirectX::XMMatrixMultiply(m_Camera, rotationY);
-		//clampMatrix.r[3] = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+		clampMatrix = DirectX::XMMatrixMultiply(rotationX, m_Camera);
+		clampMatrix = DirectX::XMMatrixMultiply(m_Camera, rotationY);
+		clampMatrix.r[3] = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
 
-		//DirectX::XMVECTOR dotResult = DirectX::XMVector3Dot(clampMatrix.r[2], worldUp);
-		//if (dotResult.m128_f32[0] < 0.99f)
-		//{
-		//	if (dy < 0)
-		//	{
+		DirectX::XMVECTOR dotResult = DirectX::XMVector3Dot(clampMatrix.r[2], worldUp);
+		if (dotResult.m128_f32[0] < 0.99f)
+		{
+			if (dy < 0)
+			{
 				m_Camera = DirectX::XMMatrixMultiply(rotationX, m_Camera);
-			//}
+			}
 			m_Camera = DirectX::XMMatrixMultiply(m_Camera, rotationY);
-		//}
-		//if (dotResult.m128_f32[0] > -0.99f)
-		//{
-		//	if (dy > 0)
-		//	{
-		//		m_Camera = DirectX::XMMatrixMultiply(rotationX, m_Camera);
-		//	}
-		//	m_Camera = DirectX::XMMatrixMultiply(m_Camera, rotationY);
-		//}
+		}
+		if (dotResult.m128_f32[0] > -0.99f)
+		{
+			if (dy > 0)
+			{
+				m_Camera = DirectX::XMMatrixMultiply(rotationX, m_Camera);
+			}
+			m_Camera = DirectX::XMMatrixMultiply(m_Camera, rotationY);
+		}
 		m_Camera.r[3] = position;
 	}
 
@@ -735,12 +734,10 @@ bool D3DRenderer::Update(const float & delta)
 		anim_index = 2;
 	}
 
-	//DynamicModel* dynamodel = m_ModelManager->GetDynamicModel("Kachujin");
-	//Animation* anim = dynamodel->GetAnimations()[anim_index];
-	//dynamodel->GetAnimationInterpolator().SetAnimation(anim);
-	//dynamodel = m_ModelManager->GetDynamicModel("ZombieCop");
-	//anim = dynamodel->GetAnimations()[anim_index];
-	//dynamodel->GetAnimationInterpolator().SetAnimation(anim);
+	if (m_InputManager->GetKeyboardButton(VK_ESCAPE))
+	{
+		return false;
+	}
 
 	return true;
 }
