@@ -74,7 +74,6 @@ struct Joint
 	FbxNode*			node;
 	FbxString			name;
 	FbxMatrix			matrix;
-	//FbxQuaternion		quaternion;
 	FbxNode*			parent_node;
 	int					parent_index;
 };

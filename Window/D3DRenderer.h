@@ -83,21 +83,16 @@ private:
 
 
 	// private functions
-	void AddPoseToDebugRenderer(const std::vector<Joint>& pose);
+	void AddPoseToDebugRenderer(const std::vector<Joint*>& pose);
 
-
-	void LoadStaticModel(const std::string& name, const std::string& mesh);
-	void LoadDynamicModel(const std::string& name, const std::string& mesh, const std::string& pose, std::string animations[], unsigned int num_animations);
 	void DrawMesh(const std::vector<Mesh*>& mesh);
-	void DrawStaticModel(const StaticModel* model);
 	void DrawDynamicModel(const DynamicModel* model);
+	void DrawStaticModel(const StaticModel* model);
 
 	void CreateFloor(void);
 	void SetupLights(void);
 
 	void MoveCamera(const float& delta, const float& move_speed, const float& rot_speed_x, const float& rot_speed_y);
-
-	void ShowAndHideCursor(const bool& show);
 
 
 public:

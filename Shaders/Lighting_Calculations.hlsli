@@ -49,17 +49,13 @@ float3 CalculatePointLight(LIGHT light, float3 surface_position, float3 surface_
 float3 CalculateSpotLight(LIGHT light, float3 surface_position, float3 surface_normal)
 {
 	// create a vector to the spot light
-    float3 to_light_vector = normalize(light.position.xyz - surface_position);
-    // calculate the surface ratio
-    float surface_ratio = saturate(dot(-to_light_vector, light.direction.xyz));
-    // find the spot factor
-    float spot_factor = (surface_ratio > light.cone_ratio.y) ? 1.0f : 0.0f;
+	float3 to_light_vector = light.position.xyz - surface_position;
 	// calculate the spot light's ratio on the surface
-	float spot_light_ratio = saturate(dot(to_light_vector, surface_normal));
+	float spot_light_ratio = saturate(dot(normalize(to_light_vector), surface_normal));
 	// multiply the light's color by the light's ratio on the surface
-    float3 color = spot_factor * spot_light_ratio * light.color.xyz;
+	float3 color = spot_light_ratio * light.color.xyz;
 	// return the final color attenuated
-	return color;
+	return color;// *attenuation;
 };
 
 float CalculateSpecular(float3 to_light, float3 camera_position, float3 surface_position, float3 surface_normal, float spec_power, float spec_intensity)

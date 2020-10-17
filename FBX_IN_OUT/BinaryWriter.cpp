@@ -3,22 +3,13 @@
 
 void BinaryWriter::WriteMatrix(const FbxMatrix & m)
 {
-	for (int h = 0; h < 4; ++h)
+	for (int h = 0; h < 4; h++)
 	{
-		for (int w = 0; w < 4; ++w)
+		for (int w = 0; w < 4; w++)
 		{
-			float value = static_cast<float>(m.mData[h][w]);
+			float value = (float)m.mData[h][w];
 			write.write((char*)&value, sizeof(float));
 		}
-	}
-}
-
-void BinaryWriter::WriteQuaternion(const FbxQuaternion& q)
-{
-	for (int i = 0; i < 4; ++i)
-	{
-		float value = static_cast<float>(q.mData[i]);
-		write.write((char*)&value, sizeof(float));
 	}
 }
 
@@ -178,7 +169,6 @@ bool BinaryWriter::WriteBindPoseToFile(const char * filename, const std::vector<
 			const Joint& w = j[i];
 			// matrix
 			WriteMatrix(w.matrix);
-			//WriteQuaternion(w.quaternion);
 			// name
 			size_t name_size = w.name.Size();
 			write.write((char*)&name_size, sizeof(size_t));
@@ -234,7 +224,6 @@ bool BinaryWriter::WriteAnimationsToFile(const char * filename, const std::vecto
 					write.write((char*)temp_joint.name.Buffer(), joint_name_size);
 					//temp_joint.matrix;
 					WriteMatrix(temp_joint.matrix);
-					//WriteQuaternion(temp_joint.quaternion);
 					//temp_joint.parent_index;
 					int temp_joint_parent_index = temp_joint.parent_index;
 					write.write((char*)&temp_joint_parent_index, sizeof(int));

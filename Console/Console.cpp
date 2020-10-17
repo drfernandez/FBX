@@ -18,20 +18,17 @@ int main()
 	std::function<void(const char*, const char*, const char*, const char*)> func;
 
 	HMODULE mod = LoadLibrary(L"FBXINOUT.dll");
-	if (mod != 0)
-	{
-		FuncPtr func_ptr = (FuncPtr)GetProcAddress(mod, "ExportFbxDataFromFile");
+	FuncPtr func_ptr = (FuncPtr)GetProcAddress(mod, "ExportFbxDataFromFile");
 
-		if (func_ptr)
-			func_ptr(
-				"../Assets/kachujin.fbx",
-				"../Assets/kachujin.msh",
-				"../Assets/kachujin.pose",
-				nullptr
-			);
+	if (func_ptr)
+		func_ptr(
+			"../Assets/monkeyface.fbx",
+			"../Assets/monkeyface.msh",
+			nullptr,
+			nullptr
+		);
 
-		bool freed = FreeLibrary(mod);
-	}
+	bool freed = FreeLibrary(mod);
 
 	return 0;
 }

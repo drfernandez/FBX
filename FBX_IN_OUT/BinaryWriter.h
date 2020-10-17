@@ -16,7 +16,6 @@ private:
 	BinaryWriter& operator=(const BinaryWriter& copy) = default;
 
 	void WriteMatrix(const FbxMatrix& m);
-	void WriteQuaternion(const FbxQuaternion& q);
 
 public:
 	static BinaryWriter* GetInstance(void);

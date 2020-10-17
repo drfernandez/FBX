@@ -5,7 +5,6 @@ Joint::Joint(void)
 {
 	name = "";
 	matrix = DirectX::XMMatrixIdentity();
-	//quaternion = DirectX::XMVectorSet(0, 0, 0, 0);
 	parent_index = -1;
 }
 
@@ -13,26 +12,26 @@ Joint::~Joint(void)
 {
 	name = "";
 	matrix = DirectX::XMMatrixIdentity();
-	//quaternion = DirectX::XMVectorSet(0, 0, 0, 0);
 	parent_index = -1;
 }
-Joint::Joint(const Joint & copy)
-{
-	name = copy.name;
-	matrix = copy.matrix;
-	parent_index = copy.parent_index;
-}
 
-Joint & Joint::operator=(const Joint & copy)
-{
-	if (this != &copy)
-	{
-		name = copy.name;
-		matrix = copy.matrix;
-		parent_index = copy.parent_index;
-	}
-	return *this;
-}
+//Joint::Joint(const Joint & copy)
+//{
+//	name = copy.name;
+//	matrix = copy.matrix;
+//	parent_index = copy.parent_index;
+//}
+//
+//Joint & Joint::operator=(const Joint & copy)
+//{
+//	if (this != &copy)
+//	{
+//		name = copy.name;
+//		matrix = copy.matrix;
+//		parent_index = copy.parent_index;
+//	}
+//	return *this;
+//}
 
 KeyFrame::KeyFrame(void)
 {

@@ -1,35 +1,19 @@
 #include "D3DRenderer.h"
 
 
-void D3DRenderer::AddPoseToDebugRenderer(const std::vector<Joint> & pose)
+void D3DRenderer::AddPoseToDebugRenderer(const std::vector<Joint*> & pose)
 {
 	for (size_t i = 0; i < pose.size(); i++)
 	{
-		if (pose[i].parent_index == -1)
+		if (pose[i]->parent_index == -1)
 		{
 			continue;
 		}
 		else
 		{
-			m_DebugRenderer->AddLines(pose[i].matrix.r[3], pose[pose[i].parent_index].matrix.r[3]);
+			m_DebugRenderer->AddLines(pose[i]->matrix.r[3], pose[pose[i]->parent_index]->matrix.r[3]);
 		}
 	}
-}
-
-void D3DRenderer::LoadStaticModel(const std::string& name, const std::string& mesh)
-{
-	m_ModelManager->AddStaticModel(name, mesh);
-}
-
-void D3DRenderer::LoadDynamicModel(const std::string& name, const std::string& mesh, const std::string& pose, std::string animations[], unsigned int num_animations)
-{
-	std::vector<std::string> animnamevector;
-	for (size_t i = 0; i < num_animations; i++)
-	{
-		animnamevector.push_back(animations[i].c_str());
-	}
-
-	m_ModelManager->AddDynamicModel(name, mesh, pose, animnamevector);
 }
 
 void D3DRenderer::DrawMesh(const std::vector<Mesh*>& mesh)
@@ -185,9 +169,9 @@ void D3DRenderer::SetupLights(void)
 	m_LightList.array[light_index++] = point;
 
 	//ZeroMemory(&spot, sizeof(LIGHT));
-	//spot.position			= DirectX::XMFLOAT4(0.0f, 150.0f, 0.0f, 3.0f);
+	//spot.position			= DirectX::XMFLOAT4(0.0f, 250.0f, 0.0f, 2.0f);
 	//spot.color				= DirectX::XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f);
-	//spot.direction			= DirectX::XMFLOAT4(0.0f, -1.0f, 1.0f, 1.0f);
+	//spot.direction			= DirectX::XMFLOAT4(0.0f, -1.0f, 0.0f, 1.0f);
 	//spot.cone_ratio			= DirectX::XMFLOAT4(0.98f, 0.97f, 300.0f, 1.0f);
 	//m_LightList.array[light_index++] = spot;
 
@@ -196,10 +180,10 @@ void D3DRenderer::SetupLights(void)
 
 void D3DRenderer::MoveCamera(const float & delta, const float & move_speed, const float & rot_speed_x, const float& rot_speed_y)
 {
-	if (m_Camera.r[3].m128_f32[1] < 15.0f)
-	{
-		m_Camera.r[3].m128_f32[1] = 15.0f;
-	}
+	//if (m_Camera.r[3].m128_f32[1] < 15.0f)
+	//{
+	//	m_Camera.r[3].m128_f32[1] = 15.0f;
+	//}
 	if (m_InputManager->GetKeyboardButton((int)'W'))
 	{
 		DirectX::XMMATRIX t = DirectX::XMMatrixTranslation(0.0f, 0.0f, move_speed * delta);
@@ -247,27 +231,27 @@ void D3DRenderer::MoveCamera(const float & delta, const float & move_speed, cons
 
 		m_Camera.r[3] = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
 
-		clampMatrix = DirectX::XMMatrixMultiply(rotationX, m_Camera);
-		clampMatrix = DirectX::XMMatrixMultiply(m_Camera, rotationY);
-		clampMatrix.r[3] = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+		//clampMatrix = DirectX::XMMatrixMultiply(rotationX, m_Camera);
+		//clampMatrix = DirectX::XMMatrixMultiply(m_Camera, rotationY);
+		//clampMatrix.r[3] = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
 
-		DirectX::XMVECTOR dotResult = DirectX::XMVector3Dot(clampMatrix.r[2], worldUp);
-		if (dotResult.m128_f32[0] < 0.99f)
-		{
-			if (dy < 0)
-			{
+		//DirectX::XMVECTOR dotResult = DirectX::XMVector3Dot(clampMatrix.r[2], worldUp);
+		//if (dotResult.m128_f32[0] < 0.99f)
+		//{
+		//	if (dy < 0)
+		//	{
 				m_Camera = DirectX::XMMatrixMultiply(rotationX, m_Camera);
-			}
+			//}
 			m_Camera = DirectX::XMMatrixMultiply(m_Camera, rotationY);
-		}
-		if (dotResult.m128_f32[0] > -0.99f)
-		{
-			if (dy > 0)
-			{
-				m_Camera = DirectX::XMMatrixMultiply(rotationX, m_Camera);
-			}
-			m_Camera = DirectX::XMMatrixMultiply(m_Camera, rotationY);
-		}
+		//}
+		//if (dotResult.m128_f32[0] > -0.99f)
+		//{
+		//	if (dy > 0)
+		//	{
+		//		m_Camera = DirectX::XMMatrixMultiply(rotationX, m_Camera);
+		//	}
+		//	m_Camera = DirectX::XMMatrixMultiply(m_Camera, rotationY);
+		//}
 		m_Camera.r[3] = position;
 	}
 
@@ -376,11 +360,83 @@ bool D3DRenderer::Initialize(HWND hWnd, unsigned int nWidth, unsigned int nHeigh
 	// Mesh loading
 	{
 		std::string meshname = "../Assets/sphere.msh";
-		LoadStaticModel("Skybox", meshname);
+		m_ModelManager->AddStaticModel("Skybox", meshname);
 		StaticModel* model = m_ModelManager->GetStaticModel("Skybox");
 		if (model)
 		{
-			model->GetMeshes()[0]->m_TextureDiffuseID = m_TextureManager->AddTexture("../Assets/skybox.fbm/nightsky.dds", TextureManager::TM_TYPE::DIFFUSE);	
+			for (size_t i = 0; i < model->GetMeshes().size(); i++)
+			{
+				model->GetMeshes()[i]->m_TextureDiffuseID = m_TextureManager->AddTexture("../Assets/skybox.fbm/nightsky.dds", TextureManager::TM_TYPE::DIFFUSE);
+			}
+			model->SetWorldMatrix(DirectX::XMMatrixTranslation(m_Camera.r[3].m128_f32[0], m_Camera.r[3].m128_f32[1], m_Camera.r[3].m128_f32[2]));
+		}
+	}
+
+	//{
+	//	std::string meshname = "../Assets/BattleMage_Run.msh";
+	//	std::string posename = "../Assets/BattleMage_Run.pose";
+	//	std::string animationnames[2] =
+	//	{
+	//		"../Assets/BattleMage_Run.anim",
+	//	};
+	//	std::vector<std::string> animnamevector;
+	//	for (size_t i = 0; i < ARRAYSIZE(animationnames); i++)
+	//	{
+	//		animnamevector.push_back(animationnames[i].c_str());
+	//	}
+
+	//	m_ModelManager->AddDynamicModel("BattleMage", meshname, posename, animnamevector);
+	//	DynamicModel* model = m_ModelManager->GetDynamicModel("BattleMage");
+	//	if (model)
+	//	{
+	//		//model->SetWorldMatrix(DirectX::XMMatrixTranslation(100.0f, 0.0f, 0.0f));
+	//		model->SetWorldMatrix(DirectX::XMMatrixScaling(30.0f, 30.0f, 30.0f));
+	//	}
+	//}
+
+	//{
+	//	std::string meshname = "../Assets/Box_Idle.msh";
+	//	std::string posename = "../Assets/Box_Idle.pose";
+	//	std::string animationnames[2] =
+	//	{
+	//		"../Assets/Box_Idle.anim",
+	//	};
+	//	std::vector<std::string> animnamevector;
+	//	for (size_t i = 0; i < ARRAYSIZE(animationnames); i++)
+	//	{
+	//		animnamevector.push_back(animationnames[i].c_str());
+	//	}
+
+	//	m_ModelManager->AddDynamicModel("Box_Idle", meshname, posename, animnamevector);
+	//	DynamicModel* model = m_ModelManager->GetDynamicModel("Box_Idle");
+	//	if (model)
+	//	{
+	//		DirectX::XMMATRIX result = DirectX::XMMatrixMultiply(DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f), DirectX::XMMatrixScaling(30.0f, 30.0f, 30.0f));
+	//		model->SetWorldMatrix(result);
+	//	}
+	//}
+
+	{
+		std::string meshname = "../Assets/zombiecop.msh";
+		std::string posename = "../Assets/zombiecop.pose";
+		std::string animationnames[] = 
+		{
+			"../Assets/zombiecop_idle0.anim",
+			"../Assets/zombiecop_scratch.anim",
+			"../Assets/zombiecop_thriller.anim"
+
+		};
+		std::vector<std::string> animnamevector;
+		for (size_t i = 0; i < ARRAYSIZE(animationnames); i++)
+		{
+			animnamevector.push_back(animationnames[i].c_str());
+		}
+
+		m_ModelManager->AddDynamicModel("ZombieCop", meshname, posename, animnamevector);
+		DynamicModel* model = m_ModelManager->GetDynamicModel("ZombieCop");
+		if (model)
+		{ 
+			model->SetWorldMatrix(DirectX::XMMatrixTranslation(100.0f, 0.0f, 0.0f));
 		}
 	}
 
@@ -389,15 +445,32 @@ bool D3DRenderer::Initialize(HWND hWnd, unsigned int nWidth, unsigned int nHeigh
 		std::string posename = "../Assets/kachujin.pose";
 		std::string animationnames[] = 
 		{
-			"../Assets/kachujin_fighting_idle.anim",
+			"../Assets/kachujin_idle.anim",
+			"../Assets/kachujin_macarena.anim",
+			"../Assets/kachujin_twerk.anim"
 		};
-		LoadDynamicModel("Kachujin", meshname, posename, animationnames, ARRAYSIZE(animationnames));
-		//LoadStaticModel("Kachujin", meshname);
+		std::vector<std::string> animnamevector;
+		for (size_t i = 0; i < ARRAYSIZE(animationnames); i++)
+		{
+			animnamevector.push_back(animationnames[i].c_str());
+		}
+
+		m_ModelManager->AddDynamicModel("Kachujin", meshname, posename, animnamevector);
+		DynamicModel* model = m_ModelManager->GetDynamicModel("Kachujin");
+		if (model)
+		{ 
+			model->SetWorldMatrix(DirectX::XMMatrixTranslation(-100.0f, 0.0f, 0.0f));
+		}
 	}
 
 	{
-		std::string meshname = "../Assets/sphere.msh";
-		LoadStaticModel("PointLight", meshname);
+		std::string meshname = "../Assets/capsule.msh";
+		m_ModelManager->AddStaticModel("Object", meshname);
+		StaticModel* object = m_ModelManager->GetStaticModel("Object");
+		if (object)
+		{
+			object->SetWorldMatrix(DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f));
+		}
 	}
 
 
@@ -432,7 +505,7 @@ bool D3DRenderer::Initialize(HWND hWnd, unsigned int nWidth, unsigned int nHeigh
 	m_Camera = DirectX::XMMatrixInverse(
 		nullptr,
 		DirectX::XMMatrixLookAtLH(
-			DirectX::XMVectorSet(0.0f, 200.0f, -200.0f, 1.0f),	// camera pos
+			DirectX::XMVectorSet(0.0f, 200.0f, 200.0f, 1.0f),	// camera pos
 			DirectX::XMVectorSet(0.0f, 125.0f, 0.0f, 0.0f),		// looking at pos
 			DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)		// world up
 		)
@@ -536,13 +609,15 @@ bool D3DRenderer::Update(const float & delta)
 
 
 	////////////////////////////////////////////////////////////////////////////////
-	// update the position of the kachujin
+	StaticModel* object = m_ModelManager->GetStaticModel("Object");
+	if (object)
 	{
-		DynamicModel* model = m_ModelManager->GetDynamicModel("Kachujin");
-		if (model)
-		{
-			model->SetWorldMatrix(DirectX::XMMatrixTranslation(0, 0, 0));
-		}
+		DirectX::XMMATRIX t = DirectX::XMMatrixTranslation(0, 5, 0);
+		DirectX::XMMATRIX s = DirectX::XMMatrixScaling(15, 15, 15);
+		DirectX::XMMATRIX r = DirectX::XMMatrixRotationY(elapsed_time);
+
+
+		object->SetWorldMatrix(DirectX::XMMatrixMultiply(r, DirectX::XMMatrixMultiply(t, s)));
 	}
 	////////////////////////////////////////////////////////////////////////////////
 
@@ -560,8 +635,6 @@ bool D3DRenderer::Update(const float & delta)
 		size = (size > NUM_JOINTS) ? NUM_JOINTS : size;
 
 		std::vector<Joint*> result = model->GetAnimationInterpolator().Interpolate(delta_inc);
-		//const std::vector<Joint*>& result = model->GetBindPose();
-		std::vector<Joint> debug_skeleton;
 		for (size_t i = 0; i < size; i++)
 		{
 			DirectX::XMMATRIX inv_bindpose = DirectX::XMMatrixInverse(nullptr, model->GetBindPose()[i]->matrix);
@@ -572,13 +645,9 @@ bool D3DRenderer::Update(const float & delta)
 			model->GetCurrentPose()[i]->parent_index = result[i]->parent_index;
 			model->GetCurrentPose()[i]->matrix = curr_pose_matrix;
 
-			Joint temp;
-			temp.matrix = DirectX::XMMatrixMultiply(curr_pose_matrix, model->GetWorldMatrix());
-			temp.name = result[i]->name;
-			temp.parent_index = result[i]->parent_index;
-			debug_skeleton.push_back(temp);
+			result[i]->matrix = DirectX::XMMatrixMultiply(result[i]->matrix, model->GetWorldMatrix());
 		}
-		AddPoseToDebugRenderer(debug_skeleton);
+		AddPoseToDebugRenderer(result);
 
 		for (size_t i = 0; i < result.size(); i++)
 		{
@@ -632,25 +701,6 @@ bool D3DRenderer::Update(const float & delta)
 	m_Context->UpdateSubresource(m_ConstantBuffer[CB_TYPE::LIGHTS], 0, nullptr, &m_LightList, 0, 0);
 	////////////////////////////////////////////////////////////////////////////////
 
-	////////////////////////////////////////////////////////////////////////////////
-	StaticModel* object = m_ModelManager->GetStaticModel("PointLight");
-	if (object)
-	{
-		DirectX::XMMATRIX t = DirectX::XMMatrixTranslation(m_LightList.array[2].position.x, m_LightList.array[2].position.y, m_LightList.array[2].position.z);
-		DirectX::XMMATRIX s = DirectX::XMMatrixScaling(5, 5, 5);
-		DirectX::XMMATRIX r = DirectX::XMMatrixRotationY(0);
-
-
-		object->SetWorldMatrix(DirectX::XMMatrixMultiply(s, DirectX::XMMatrixMultiply(r, t)));
-	}
-	////////////////////////////////////////////////////////////////////////////////
-
-
-	////////////////////////////////////////////////////////////////////////////////
-	if (m_InputManager->GetKeyboardButton(VK_ESCAPE))
-	{
-		return false;
-	}
 
 	if (m_InputManager->GetKeyboardButton((int)'P'))
 	{
@@ -670,7 +720,27 @@ bool D3DRenderer::Update(const float & delta)
 	{
 		m_bPauseAnimation = true;
 	}
-	////////////////////////////////////////////////////////////////////////////////
+
+	static int anim_index = 0;
+	if (m_InputManager->GetKeyboardButton((int)VK_NUMPAD0))
+	{
+		anim_index = 0;
+	}
+	if (m_InputManager->GetKeyboardButton((int)VK_NUMPAD1))
+	{
+		anim_index = 1;
+	}
+	if (m_InputManager->GetKeyboardButton((int)VK_NUMPAD2))
+	{
+		anim_index = 2;
+	}
+
+	//DynamicModel* dynamodel = m_ModelManager->GetDynamicModel("Kachujin");
+	//Animation* anim = dynamodel->GetAnimations()[anim_index];
+	//dynamodel->GetAnimationInterpolator().SetAnimation(anim);
+	//dynamodel = m_ModelManager->GetDynamicModel("ZombieCop");
+	//anim = dynamodel->GetAnimations()[anim_index];
+	//dynamodel->GetAnimationInterpolator().SetAnimation(anim);
 
 	return true;
 }
@@ -863,10 +933,4 @@ void D3DRenderer::Shutdown(void)
 
 	SAFE_RELEASE(m_Device);
 	////////////////////////////////////////////////////////////////////////////////
-}
-
-
-void D3DRenderer::ShowAndHideCursor(const bool& show)
-{
-
 }
